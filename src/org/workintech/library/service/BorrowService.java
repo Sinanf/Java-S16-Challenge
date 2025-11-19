@@ -57,6 +57,10 @@ public class BorrowService {
         }
 
         BorrowRecord record = activeBorrows.get(book.getId());
+        if (record == null) {
+            System.out.println("Bu kitap için aktif ödünç kaydı bulunamadı.");
+            return null;
+        }
         record.setReturnDate(LocalDate.now());
 
         // Reader’dan çıkar
