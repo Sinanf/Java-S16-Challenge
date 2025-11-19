@@ -24,10 +24,53 @@ public class BookService {
                                  int edition,
                                  LocalDate dateOfPurchase) {
 
-        Book book = new Book(id, title, author, category, edition, dateOfPurchase);
+        Book book;
+
+        switch (category) {
+            case STUDY_BOOK -> {
+
+                book = new StudyBook(
+                        id,
+                        title,
+                        author,
+                        category,
+                        edition,
+                        dateOfPurchase,
+                        "General Study"
+                );
+            }
+            case JOURNAL -> {
+                book = new Journal(
+                        id,
+                        title,
+                        author,
+                        category,
+                        edition,
+                        dateOfPurchase,
+                        1 // issueNumber: şimdilik 1
+                );
+            }
+            case MAGAZINE -> {
+                book = new Magazine(
+                        id,
+                        title,
+                        author,
+                        category,
+                        edition,
+                        dateOfPurchase,
+                        "General"
+                );
+            }
+
+                default -> {
+                    book = new Book(id, title, author, category, edition, dateOfPurchase);
+                }
+        }
+
         library.addBook(book);
         return book;
     }
+
 
     public boolean updateTitle(int bookId, String newTitle) {
         Book book = library.findById(bookId);

@@ -50,6 +50,8 @@ public class ConsoleMenu {
                 case "7" -> borrowBookFlow();
                 case "8" -> returnBookFlow();
                 case "9" -> listReaderBooksFlow();
+                case "10" -> updateBookFlow();
+                case "11" -> listByCategoryFlow();
                 case "0" -> {
                     running = false;
                     System.out.println("Sistemden çıkılıyor. Görüşmek üzere!");
@@ -72,6 +74,8 @@ public class ConsoleMenu {
         System.out.println("7 - Kitap ödünç al");
         System.out.println("8 - Kitap iade et");
         System.out.println("9 - Kullanıcının elindeki kitapları listele");
+        System.out.println("10 - Kitap bilgisi güncelle");
+        System.out.println("11 - Kategoriye göre kitap listele");
         System.out.println("0 - Çıkış");
         System.out.print("Seçiminiz: ");
     }
@@ -303,6 +307,71 @@ public class ConsoleMenu {
 
         reader.getBorrowedBooks().forEach(Book::display);
     }
+
+    /**
+     * 10 - Kitap bilgisi güncelle
+     */
+    private void updateBookFlow() {
+        try {
+            System.out.println("=== Kitap Güncelle ===");
+
+            System.out.print("Güncellenecek kitap ID: ");
+            int bookId = Integer.parseInt(scanner.nextLine().trim());
+
+            Book book = bookService.getById(bookId);
+            if (book == null) {
+                System.out.println("Bu ID'ye sahip kitap bulunamadı.");
+                return;
+            }
+
+            System.out.println("Güncellenecek alanı seçin:");
+            System.out.println("1 - Başlık (Title)");
+            System.out.println("2 - Kategori");
+            System.out.println("0 - İptal");
+            System.out.print("Seçiminiz: ");
+
+            String input = scanner.nextLine().trim();
+
+            switch (input) {
+                case "1" -> {
+                    System.out.print("Yeni başlık: ");
+                    String newTitle = scanner.nextLine().trim();
+                    bookService.updateTitle(bookId, newTitle);
+                    System.out.println("Başlık güncellendi.");
+                }
+                case "2" -> {
+                    BookCategory newCategory = askCategoryFromUser();
+                    bookService.updateCategory(bookId, newCategory);
+                    System.out.println("Kategori güncellendi.");
+                }
+                case "0" -> System.out.println("İşlem iptal edildi.");
+                default -> System.out.println("Geçersiz seçim.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Geçersiz ID girdiniz.");
+        }
+    }
+
+    /**
+     * 11 - Kategoriye göre listeleme
+     */
+    private void listByCategoryFlow() {
+        System.out.println("=== Kategoriye Göre Listeleme ===");
+
+        BookCategory category = askCategoryFromUser(); // zaten yazmıştık
+
+        List<Book> results = bookService.searchByCategory(category);
+
+        if (results.isEmpty()) {
+            System.out.println("Bu kategoride hiç kitap yok.");
+        } else {
+            System.out.println("Kategori: " + category);
+            results.forEach(Book::display);
+        }
+    }
+
+
 
     /**
      * Kullanıcıdan readerId isteyip, map'ten Reader getiren yardımcı metod.
