@@ -1,20 +1,50 @@
-// BorrowRecord java
 package org.workintech.library.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
+/**
+ * Bir kitabın kime ve hangi tarihte ödünç verildiğini tutan kayıt sınıfıdır.
+ */
 public class BorrowRecord {
-    private final int bookId;
-    private final int readerId;
-    private final LocalDateTime borrowAt;
 
-    public BorrowRecord(int bookId, int readerId) {
-        this.bookId = bookId;
-        this.readerId = readerId;
-        this.borrowAt = LocalDateTime.now();
+    private final Reader reader;
+    private final Book book;
+    private final LocalDate borrowDate;
+    private LocalDate returnDate; // iade edilince dolacak
+
+    public BorrowRecord(Reader reader, Book book) {
+        this.reader = reader;
+        this.book = book;
+        this.borrowDate = LocalDate.now();
     }
 
-    public int getBookId() { return bookId; }
-    public int getReaderId() { return readerId; }
-    public LocalDateTime getBorrowAt() { return borrowAt; }
+    public Reader getReader() {
+        return reader;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    @Override
+    public String toString() {
+        return "BorrowRecord{" +
+                "reader=" + reader.getName() +
+                ", book=" + book.getTitle() +
+                ", borrowDate=" + borrowDate +
+                ", returnDate=" + returnDate +
+                '}';
+    }
 }

@@ -2,6 +2,11 @@ package org.workintech.library.app;
 
 import org.workintech.library.model.*;
 import org.workintech.library.service.BookService;
+import org.workintech.library.service.BorrowService;
+import org.workintech.library.app.ConsoleMenu;
+import java.util.HashMap;
+import java.util.Map;
+
 
 import java.time.LocalDate;
 
@@ -11,8 +16,15 @@ public class LibraryApp {
 
         Library library = new Library("Workintech Library");
         BookService bookService = new BookService(library);
+        BorrowService borrowService = new BorrowService();
 
-        ConsoleMenu consoleMenu = new ConsoleMenu(library, bookService);
+        // Örnek kullanıcılar (istersen menüye user ekleme kısmı da ekleyebiliriz)
+        Map<Integer, Reader> readers = new HashMap<>();
+        readers.put(1, new Reader(1, "Sinan"));
+        readers.put(2, new Reader(2, "Ayşe"));
+        readers.put(3, new Reader(3, "Mehmet"));
+
+        ConsoleMenu consoleMenu = new ConsoleMenu(library, bookService, borrowService, readers);
         consoleMenu.start();
 
 

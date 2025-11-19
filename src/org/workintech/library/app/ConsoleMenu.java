@@ -2,24 +2,34 @@ package org.workintech.library.app;
 
 import org.workintech.library.model.*;
 import org.workintech.library.service.BookService;
+import org.workintech.library.service.BorrowService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
  * Konsol üzerinden kullanıcıyla etkileşimi yöneten sınıf.
- * BookService ve Library üzerinden kitap işlemleri yapılır.
+ * BookService, BorrowService ve Library üzerinden kitap operasyonları yapılır.
  */
 public class ConsoleMenu {
 
     private final Library library;
     private final BookService bookService;
+    private final BorrowService borrowService;
+    private final Map<Integer, Reader> readers;
     private final Scanner scanner;
 
-    public ConsoleMenu(Library library, BookService bookService) {
+    public ConsoleMenu(Library library,
+                       BookService bookService,
+                       BorrowService borrowService,
+                       Map<Integer, Reader> readers) {
+
         this.library = library;
         this.bookService = bookService;
+        this.borrowService = borrowService;
+        this.readers = readers;
         this.scanner = new Scanner(System.in);
     }
 
@@ -37,6 +47,9 @@ public class ConsoleMenu {
                 case "4" -> searchByTitle();
                 case "5" -> searchByAuthor();
                 case "6" -> deleteBook();
+                case "7" -> borrowBookFlow();
+                case "8" -> returnBookFlow();
+                case "9" -> listReaderBooksFlow();
                 case "0" -> {
                     running = false;
                     System.out.println("Sistemden çıkılıyor. Görüşmek üzere!");
@@ -56,10 +69,16 @@ public class ConsoleMenu {
         System.out.println("4 - Kitabı isme göre ara");
         System.out.println("5 - Yazara göre kitap ara");
         System.out.println("6 - Kitap sil");
+        System.out.println("7 - Kitap ödünç al");
+        System.out.println("8 - Kitap iade et");
+        System.out.println("9 - Kullanıcının elindeki kitapları listele");
         System.out.println("0 - Çıkış");
         System.out.print("Seçiminiz: ");
     }
 
+    /**
+     * 1 - Yeni kitap ekleme akışı
+     */
     private void addBookFlow() {
         try {
             System.out.println("=== Yeni Kitap Ekle ===");
@@ -83,7 +102,7 @@ public class ConsoleMenu {
             System.out.print("Baskı (edition) numarası: ");
             int edition = Integer.parseInt(scanner.nextLine().trim());
 
-            // Şimdilik satın alma tarihini bugünün tarihi yapıyoruz.
+            // Şimdilik satın alma tarihi = bugün
             LocalDate purchaseDate = LocalDate.now();
 
             Book created = bookService.createAndAddBook(
@@ -102,6 +121,9 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * Kullanıcıdan kategori seçmesini isteyen yardımcı metod
+     */
     private BookCategory askCategoryFromUser() {
         while (true) {
             System.out.println("Kategori seçin:");
@@ -127,6 +149,9 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * 2 - Tüm kitapları listeleme
+     */
     private void listAllBooks() {
         System.out.println("=== Tüm Kitaplar ===");
         if (library.getAllBooks().isEmpty()) {
@@ -136,6 +161,9 @@ public class ConsoleMenu {
         library.getAllBooks().forEach(Book::display);
     }
 
+    /**
+     * 3 - ID ile arama
+     */
     private void searchById() {
         try {
             System.out.print("Aranacak kitap ID: ");
@@ -153,6 +181,9 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * 4 - Başlıkla arama
+     */
     private void searchByTitle() {
         System.out.print("Aranacak başlık (veya parçası): ");
         String query = scanner.nextLine().trim();
@@ -166,6 +197,9 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * 5 - Yazara göre arama
+     */
     private void searchByAuthor() {
         System.out.print("Yazar adı (veya parçası): ");
         String query = scanner.nextLine().trim();
@@ -179,6 +213,9 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * 6 - Kitap silme
+     */
     private void deleteBook() {
         try {
             System.out.print("Silinecek kitap ID: ");
@@ -192,6 +229,103 @@ public class ConsoleMenu {
             }
         } catch (NumberFormatException e) {
             System.out.println("Geçersiz ID girdiniz.");
+        }
+    }
+
+    /**
+     * 7 - Kitap ödünç alma akışı
+     */
+    private void borrowBookFlow() {
+        try {
+            System.out.println("=== Kitap Ödünç Alma ===");
+
+            Reader reader = askReaderFromUser();
+            if (reader == null) {
+                return;
+            }
+
+            System.out.print("Ödünç alınacak kitap ID: ");
+            int bookId = Integer.parseInt(scanner.nextLine().trim());
+
+            Book book = bookService.getById(bookId);
+            if (book == null) {
+                System.out.println("Bu ID'ye sahip kitap bulunamadı.");
+                return;
+            }
+
+            borrowService.borrowBook(reader, book);
+        } catch (NumberFormatException e) {
+            System.out.println("Geçersiz ID girdiniz.");
+        }
+    }
+
+    /**
+     * 8 - Kitap iade akışı
+     */
+    private void returnBookFlow() {
+        try {
+            System.out.println("=== Kitap İade ===");
+
+            Reader reader = askReaderFromUser();
+            if (reader == null) {
+                return;
+            }
+
+            System.out.print("İade edilecek kitap ID: ");
+            int bookId = Integer.parseInt(scanner.nextLine().trim());
+
+            Book book = bookService.getById(bookId);
+            if (book == null) {
+                System.out.println("Bu ID'ye sahip kitap bulunamadı.");
+                return;
+            }
+
+            borrowService.returnBook(reader, book);
+        } catch (NumberFormatException e) {
+            System.out.println("Geçersiz ID girdiniz.");
+        }
+    }
+
+    /**
+     * 9 - Kullanıcının elindeki kitapları listeleme
+     */
+    private void listReaderBooksFlow() {
+        Reader reader = askReaderFromUser();
+        if (reader == null) {
+            return;
+        }
+
+        System.out.println("=== " + reader.getName() + " kullanıcısının elindeki kitaplar ===");
+        if (reader.getBorrowedBooks().isEmpty()) {
+            System.out.println("Bu kullanıcının elinde kitap yok.");
+            return;
+        }
+
+        reader.getBorrowedBooks().forEach(Book::display);
+    }
+
+    /**
+     * Kullanıcıdan readerId isteyip, map'ten Reader getiren yardımcı metod.
+     */
+    private Reader askReaderFromUser() {
+        System.out.println("Mevcut kullanıcılar:");
+        readers.forEach((id, r) ->
+                System.out.println("ID: " + id + " | İsim: " + r.getName()));
+
+        System.out.print("Kullanıcı ID girin: ");
+        String input = scanner.nextLine().trim();
+
+        try {
+            int readerId = Integer.parseInt(input);
+            Reader reader = readers.get(readerId);
+            if (reader == null) {
+                System.out.println("Bu ID'ye sahip kullanıcı bulunamadı.");
+                return null;
+            }
+            return reader;
+        } catch (NumberFormatException e) {
+            System.out.println("Geçersiz kullanıcı ID'si girdiniz.");
+            return null;
         }
     }
 }
