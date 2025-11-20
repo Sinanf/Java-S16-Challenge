@@ -90,9 +90,7 @@ public class Book {
         this.dateOfPurchase = dateOfPurchase;
     }
 
-    /**
-     * Konsolda tek satırda özet göstermek için.
-     */
+
     public void display() {
         System.out.println(
                 "[" + id + "] " + title +

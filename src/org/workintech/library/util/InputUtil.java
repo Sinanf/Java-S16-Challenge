@@ -40,16 +40,5 @@ public class InputUtil {
         }
     }
 
-    /**
-     * Menüde belirli bir aralıkta sayı bekliyorsak kullanılabilir.
-     */
-    public static int readMenuChoice(Scanner scanner, String prompt, int min, int max) {
-        while (true) {
-            int choice = readInt(scanner, prompt);
-            if (choice >= min && choice <= max) {
-                return choice;
-            }
-            System.out.println("❌ Lütfen " + min + " ile " + max + " arasında bir değer girin.");
-        }
-    }
+
 }

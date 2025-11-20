@@ -4,13 +4,12 @@ import java.time.LocalDate;
 
 /**
  * Kitap ödünç alma ve iade işlemlerinde faturayı temsil eder.
- * Çok basit tutulmuştur: ücret = 10 TL, iade = -10 TL
  */
 public class Bill {
 
     private final Reader reader;
     private final Book book;
-    private final double amount; // pozitif = ödeme, negatif = iade
+    private final double amount;
     private final LocalDate date;
 
     public Bill(Reader reader, Book book, double amount) {

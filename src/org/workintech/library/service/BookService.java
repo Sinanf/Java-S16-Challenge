@@ -47,7 +47,7 @@ public class BookService {
                         category,
                         edition,
                         dateOfPurchase,
-                        1 // issueNumber: şimdilik 1
+                        1 // issueNumber
                 );
             }
             case MAGAZINE -> {

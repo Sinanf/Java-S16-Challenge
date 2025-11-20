@@ -7,7 +7,7 @@ import java.time.LocalDate;
  */
 public class Magazine extends Book {
 
-    private String genre; // örn: Lifestyle, Tech, Sport
+    private String genre;
 
     public Magazine(int id,
                     String title,

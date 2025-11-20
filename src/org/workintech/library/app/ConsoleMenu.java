@@ -40,7 +40,7 @@ public class ConsoleMenu {
     }
 
     public void start() {
-        // Uygulama açılır açılmaz kütüphaneci seçtiriyoruz
+        
         if (!librarians.isEmpty()) {
             selectLibrarianFlow();
         }
@@ -71,8 +71,9 @@ public class ConsoleMenu {
                 default -> System.out.println("Geçersiz seçim, lütfen tekrar deneyin.");
             }
 
-            System.out.println(); // her işlemin sonuna boş satır
+            System.out.println(); 
         }
+        
     }
 
     private void printMenu() {
@@ -82,15 +83,15 @@ public class ConsoleMenu {
             System.out.println("Aktif Kütüphaneci: " + activeLibrarian.getName());
         }
 
-        System.out.println("01  - Yeni kitap ekle");
-        System.out.println("02  - Tüm kitapları listele");
-        System.out.println("03  - Kitabı ID ile ara");
-        System.out.println("04  - Kitabı isme göre ara");
-        System.out.println("05  - Yazara göre kitap ara");
-        System.out.println("06  - Kitap sil");
-        System.out.println("07  - Kitap ödünç al");
-        System.out.println("08  - Kitap iade et");
-        System.out.println("09  - Kullanıcının elindeki kitapları listele");
+        System.out.println("01 - Yeni kitap ekle");
+        System.out.println("02 - Tüm kitapları listele");
+        System.out.println("03 - Kitabı ID ile ara");
+        System.out.println("04 - Kitabı isme göre ara");
+        System.out.println("05 - Yazara göre kitap ara");
+        System.out.println("06 - Kitap sil");
+        System.out.println("07 - Kitap ödünç al");
+        System.out.println("08 - Kitap iade et");
+        System.out.println("09 - Kullanıcının elindeki kitapları listele");
         System.out.println("10 - Kitap bilgisi güncelle");
         System.out.println("11 - Kategoriye göre kitap listele");
         System.out.println("12 - Aktif kütüphaneci seç");

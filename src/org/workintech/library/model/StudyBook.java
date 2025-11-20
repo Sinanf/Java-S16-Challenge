@@ -8,7 +8,7 @@ import java.time.LocalDate;
  */
 public class StudyBook extends Book {
 
-    private String subject; // örn: Math, Physics
+    private String subject;
 
     public StudyBook(int id,
                      String title,

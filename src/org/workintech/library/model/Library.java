@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 /**
  * Kütüphanedeki kitap koleksiyonunu yöneten sınıf.
- * BookService iş mantığını yaparken Library sadece veriyi tutar.
+ * Library sadece veriyi tutar.
  */
 public class Library {
 

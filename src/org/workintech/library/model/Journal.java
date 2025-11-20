@@ -7,7 +7,7 @@ import java.time.LocalDate;
  */
 public class Journal extends Book {
 
-    private int issueNumber; // sayı numarası
+    private int issueNumber;
 
     public Journal(int id,
                    String title,

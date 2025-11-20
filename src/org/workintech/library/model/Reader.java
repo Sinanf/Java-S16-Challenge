@@ -11,7 +11,7 @@ public class Reader extends Person {
 
     private static final int MAX_BOOK_LIMIT = 5;
 
-    // Şu anda kullanıcıda bulunan kitaplar
+
     private Set<Book> borrowedBooks;
 
     public Reader(int id, String name) {

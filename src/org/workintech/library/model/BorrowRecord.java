@@ -10,7 +10,7 @@ public class BorrowRecord {
     private final Reader reader;
     private final Book book;
     private final LocalDate borrowDate;
-    private LocalDate returnDate; // iade edilince dolacak
+    private LocalDate returnDate;
 
     public BorrowRecord(Reader reader, Book book) {
         this.reader = reader;

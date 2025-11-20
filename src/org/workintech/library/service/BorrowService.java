@@ -17,7 +17,7 @@ public class BorrowService {
         this.activeBorrows = new HashMap<>();
     }
 
-    // 10 TL ödeme
+
     private static final double BORROW_PRICE = 10.0;
 
     public Bill borrowBook(Reader reader, Book book) {
